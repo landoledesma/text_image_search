@@ -17,15 +17,15 @@ class MultiModSearch:
         self.document_sotores.write_documents(images)
         self.retriever_text_to_image = MultiModalRetriever(
             document_store= self.document_sotores,
-            query_embedding_model= "setence-transformers/clip-ViT-B-32",
+            query_embedding_model= "sentence-transformers/clip-ViT-B-32",
             query_type="text",
-            document_embedding_models= {"image":"setence-transformers/clip-ViT-B-32"}
+            document_embedding_models= {"image":"sentence-transformers/clip-ViT-B-32"}
         )
 
         self.document_sotores.update_embeddings(retriever= self.retriever_text_to_image)
         
         self.pipeline = Pipeline()
-        self.pipeline.add_node(component= self.retriever_text_to_image, name="retiever_text_to_image",inputs=["query"])
+        self.pipeline.add_node(component= self.retriever_text_to_image, name="retriever_text_to_image",inputs=["Query"])
 
     def search(self,query,top_k=3):
         results = self.pipeline.run(query=query,params={"retriever_text_to_image":{"top_k":top_k}})
